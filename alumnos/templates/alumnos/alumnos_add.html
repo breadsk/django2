@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Alumnos add</h1>
+
+    <div style="text-align: center;">
+        <h2>Formulario CRUD para alumnos</h2><br>
+        <form action="alumnosAdd" method="POST">
+            {% csrf_token %}
+
+            <pre>Rut:  <input type="text"name="rut"> </pre>
+            <pre>Nombre:  <input type="text"name="nombre"> </pre>
+            <pre>Apellido P:  <input type="text"name="paterno"> </pre>
+            <pre>Apellido M:  <input type="text"name="materno"> </pre>
+            <pre>Fecha Nac:  <input type="date"name="fechaNac"> </pre>
+            <pre>Genero 
+                <select name="genero">
+                    {% for genero in generos %}
+                        <option value="{{genero.id_genero}}">{{genero.genero}}</option>
+                    {% endfor %}
+                </select>
+            </pre>
+            <pre>Celular:  <input type="text"name="telefono"> </pre>
+            <pre>Email:  <input type="email"name="email"> </pre>
+            <pre>Direccion:  <input type="text"name="direccion"> </pre>
+
+            <input type="submit" name="opcion" value="Agregar">
+        </form><br><br>
+        <a href="{% url 'crud' %}">Volver</a>
+        <br>
+        <div id="idMensajes">
+            {% if mensaje %}
+                {{mensaje}}
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

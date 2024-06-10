@@ -1,0 +1,49 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Alumnos edit</h1>
+    <div style="text-align: center;">
+        {% if alumno %}
+        <h2>Formulario CRUD para alumnos</h2><br>
+        <form action="{% url 'alumnosUpdate' %}" method="POST">
+            {% csrf_token %}
+
+            <pre>Rut:  <input type="text"name="rut" value="{{alumno.rut}}"> </pre>
+            <pre>Nombre:  <input type="text"name="nombre" value="{{alumno.nombre}}"> </pre>
+            <pre>Apellido P:  <input type="text"name="paterno" value="{{alumno.apellido_paterno}}"> </pre>
+            <pre>Apellido M:  <input type="text"name="materno" value="{{alumno.apellido_materno}}"> </pre>
+            <pre>Fecha Nac:  <input type="date"name="fechaNac" value="{{alumno.fecha_nacimiento|date:'Y-m-d'}}"> </pre>
+            <pre>Genero <select name="genero">
+                {% for genero in generos %}
+                    {% if genero.genero == alumno.id_genero.genero %}
+                        <option value="{{genero.id_genero}}" selected>{{genero.genero}}</option>
+                    {% else %}
+                        <option value="{{genero.id_genero}}">{{genero.genero}}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            </pre>
+            <pre>Celular:  <input type="text"name="telefono" value="{{alumno.telefono}}"> </pre>
+            <pre>Email:  <input type="email"name="email" value="{{alumno.email}}"> </pre>
+            <pre>Direccion:  <input type="text"name="direccion" value="{{alumno.direccion}}"> </pre>
+
+            <input type="submit" name="opcion" value="Actualizar">
+        </form><br><br>
+        {% endif %}
+        <a href="{% url 'crud' %}">Volver</a>
+        <br>
+        <div id="idMensajes">
+            {% if mensaje %}
+                {{mensaje}}
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
