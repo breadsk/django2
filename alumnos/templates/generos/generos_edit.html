@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Editar generos</h1>
+
+    <div style="text-align: center;">
+        {% if genero %}
+            <h2>Formulario para actualizar generos</h2>
+
+            <form action="" method="POST">
+                {% csrf_token %}
+                {{ form.as_table }}
+                <input type="submit" name="opcion" value="Actualizar">
+            </form>
+
+        {% endif %}
+        <div id="idMensajes">
+            {% if mensaje %}
+                {{ mensaje }}
+            {% endif %}
+        </div>
+        <br>
+        <hr>
+        <a href="{% url 'crud_generos' %}">Volver</a>
+    </div>
+</body>
+</html>

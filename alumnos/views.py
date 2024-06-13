@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from .models import Genero , Alumno
 
+from .forms import GeneroForm
+
 # Create your views here.
 def index(request):
     alumnos = Alumno.objects.all()
@@ -69,6 +71,7 @@ def alumnos_del(request,pk):
 def alumnos_findEdit(request,pk):
     if pk != "":
         alumno=Alumno.objects.get(rut=pk)
+        #alumno = Alumno.objects.raw(f"SELECT * FROM alumnos_alumno WHERE rut={pk}")
         generos = Genero.objects.all()
 
         print(type(alumno.id_genero.genero))
@@ -120,3 +123,65 @@ def alumnosUpdate(request):
         alumnos = Alumno.objects.all()
         context = {"alumnos":alumnos}
         return render(request,"alumnos/alumnos_list.html",context)
+    
+
+def crud_generos(request):
+    generos = Genero.objects.all()
+    context = { "generos" : generos }
+    return render(request,"generos/generos_list.html",context)
+
+def generosAdd(request):
+    context = {}
+    if request.method == "POST":
+        form = GeneroForm(request.POST)
+        if form.is_valid:
+            form.save()
+
+            #Limpiar mi formulario
+            form = GeneroForm()
+
+            context = {"mensaje":"Genero guardado satisfactoriamente","form":form}
+            return render(request,"generos/generos_add.html", context)
+    else:
+        form = GeneroForm()
+        context = {"form":form}
+        return render(request,"generos/generos_add.html", context)
+
+def generos_del(request,pk):
+    mensajes = [] #En python los arreglos se llaman listas
+    errores=[]
+    generos = Genero.objects.all()
+    try:
+        genero = Genero.objects.get(id_genero = pk)
+        if genero:
+            genero.delete()
+            mensajes.append("Bien , genero eliminado satisfactoriamente")
+            context = {"generos":generos,"mensajes":mensajes,"errores":errores}
+            return render(request,"generos/generos_list.html",context)
+    except:
+        genero = Genero.objects.all()
+        mensaje = "Error , el id no existe para ser eliminado"
+        context = {"mensaje":mensaje,"generos":generos}
+        return render(request,"generos/generos_list.html",context)
+    
+def generos_edit(request,pk):
+    try:
+        genero = Genero.objects.get(id_genero=pk)
+        context = {}
+        if genero:
+            if request.method == "POST":
+                form = GeneroForm(request.POST, instance=genero)
+                form.save()
+                mensaje = "Genero Actualizado Correctamente"
+                context = {"genero": genero, "form":form, "mensaje":mensaje}
+                return render(request,"generos/generos_edit.html",context)
+            else:
+                form = GeneroForm(instance=genero)
+                mensaje=""
+                context = {"genero":genero, "form":form, "mensaje":mensaje}
+                return render(request,"generos/generos_edit.html",context)
+    except:
+        generos = Genero.objects.all()
+        mensajes = "Error , el id no existe"
+        context = {"mensaje":mensajes,"generos":generos}
+        return render(request,"generos/generos_list.html",context)
